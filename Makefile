@@ -16,14 +16,18 @@ mkdir-work:
 	mkdir -p $(WORK)
 	mkdir -p $(DATADIR)
 
-
+createdb:
+	sudo -u postgres createdb gis
+	sudo -u postgres psql -d gis -c "CREATE EXTENSION adminpack;"
+	sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
+	sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis_topology;"
+	sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
 
 download-natural-earth:
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip -O $(DATADIR)/ne_10m_admin_0_countries.zip
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_bathymetry_K_200.zip -O $(DATADIR)/ne_10m_bathymetry_K_200.zip
 
 download-pbf:
-	wget http://download.geofabrik.de/asia/japan-latest.osm.bz2 -O $(RAWBZ2)
 	wget http://download.geofabrik.de/asia/japan-latest.osm.pbf -O $(RAWPBF)
 
 download-osm:
