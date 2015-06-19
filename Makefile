@@ -1,5 +1,3 @@
-
-
 WORK=/WORK
 DATADIR=$(WORK)/data
 RAWPBF=$(DATADIR)/japan-latest.osm.pbf
