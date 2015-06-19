@@ -58,8 +58,10 @@ RUN cd /tmp && wget https://mapbox.s3.amazonaws.com/mapbox-studio/mapbox-studio-
 
 #--- mapbox util
 RUN cd /tmp && wget https://raw.githubusercontent.com/mapbox/postgis-vt-util/master/lib.sql
-
 #--- 
+
+#--- project
+RUN mkdir /project && cd /project && git clone https://github.com/yasstake/render
 
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
