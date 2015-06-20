@@ -18,12 +18,6 @@ RUN cd /tmp && git clone https://github.com/joto/osmcoastline && cd osmcoastline
 
 
 
-#---- postgis  -----
-RUN apt-get -y install postgresql postgresql-contrib postgis
-RUN echo "host    all             all             0.0.0.0/0               md5" >> /etc/postgresql/9.3/main/pg_hba.conf
-RUN service postgresql start && /bin/su postgres -c "createuser -d -s -r -l mapbox" && /bin/su postgres -c "psql postgres -c \"ALTER USER mapbox WITH ENCRYPTED PASSWORD 'mapbox'\"" && service postgresql stop
-RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.3/main/postgresql.conf
-RUN echo "port = 5432" >> /etc/postgresql/9.3/main/postgresql.conf
 
 
 #----  imposm   
@@ -34,17 +28,6 @@ RUN cd /tmp && \
     cp imposm3 /usr/local/	&&\
     cp -r lib/* /usr/local/lib
 
-#-----    install java  ----------
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
-
-WORKDIR /data
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 #---- install osmosis ----
 RUN cd /tmp && wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.zip && cd /usr/local/ && unzip /tmp/osmosis-latest.zip
@@ -65,6 +48,31 @@ RUN mkdir /project && cd /project && git clone https://github.com/yasstake/rende
 
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
+
+#---- postgis  -----
+#RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+#RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
+RUN apt-get -y install postgresql postgresql-contrib postgis
+RUN echo "host    all             all             0.0.0.0/0               md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.3/main/postgresql.conf
+RUN echo "port = 5432" >> /etc/postgresql/9.3/main/postgresql.conf
+
+#RUN service postgresql start && sudo -u postgres "createuser -d -s -r -l mapbox" && sudo -u postgres "psql postgres -c \"ALTER USER mapbox WITH ENCRYPTED PASSWORD 'mapbox'\"" && service postgresql stop
+
+#-----    install java  ----------
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/cache/oracle-jdk8-installer
+
+WORKDIR /data
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+
+
 
 CMD ["/start.sh"]
 #CMD ["bash"]
