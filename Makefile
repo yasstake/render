@@ -67,3 +67,5 @@ filter-sea:
 import-sea:
 	$(IMPOSM) --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAFILTEROSM)
 
+boot-docker:
+	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -t mapbox
