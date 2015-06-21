@@ -50,15 +50,14 @@ ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
 
 #---- postgis  -----
-#RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-#RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-
-RUN apt-get -y install postgresql postgresql-contrib postgis
+RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list && apt-get -y update && wget --quiet --no-check-certificate -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list && apt-get -y update && apt-get -y upgrade && locale-gen --no-purge en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+RUN update-locale LANG=en_US.UTF-8
+RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgis
 RUN echo "host    all             all             0.0.0.0/0               md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN service postgresql start && /bin/su postgres -c "createuser -d -s -r -l mapbox" && /bin/su postgres -c "psql postgres -c \"ALTER USER mapbox WITH ENCRYPTED PASSWORD 'mapbox'\"" && service postgresql stop
 RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.3/main/postgresql.conf
 RUN echo "port = 5432" >> /etc/postgresql/9.3/main/postgresql.conf
-
-#RUN service postgresql start && sudo -u postgres "createuser -d -s -r -l mapbox" && sudo -u postgres "psql postgres -c \"ALTER USER mapbox WITH ENCRYPTED PASSWORD 'mapbox'\"" && service postgresql stop
 
 #-----    install java  ----------
 RUN \
@@ -71,7 +70,6 @@ RUN \
 
 WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-
 
 
 CMD ["/start.sh"]
