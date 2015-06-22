@@ -39,7 +39,7 @@ coastline-shp:
 
 
 extract-tokyo:
-	osmosis --read-pbf $(RAWPBF) --write-xml file=- | osmosis --read-xml enableDateParsing=no file=-  --bounding-box top=35.3 left=139.3 bottom=35 right=140 --write-pbf file=$(TOKYOPBF)
+	osmosis --read-pbf $(RAWPBF) --write-xml file=- | osmosis --read-xml enableDateParsing=no file=-  --bounding-box top=35.4 left=139.2 bottom=35 right=140.1 --write-pbf file=$(TOKYOPBF)
 
 
 import-pbf:
@@ -48,6 +48,9 @@ import-pbf:
 	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
    			 -mapping mapping.json -deployproduction
 
+
+import-coastline:
+	ogr2ogr 
 
 extract-sea:
 	osmosis --read-pbf $(RAWPBF) \

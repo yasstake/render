@@ -8,15 +8,13 @@ EXPOSE 3000
 
 #-- update ubuntu packages
 RUN apt-get update
-RUN apt-get -y install python-software-properties software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev
+RUN apt-get -y install python-software-properties software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev libcairo2 libcairo2-dev
 
 #--- osmium
 RUN cd /tmp && git clone http://github.com/osmcode/libosmium && cd libosmium && mkdir build && cd build && cmake .. && make && make install
 
 #--- osmcoastline
 RUN cd /tmp && git clone https://github.com/joto/osmcoastline && cd osmcoastline && mkdir build && cd build && cmake .. && make install
-
-
 
 
 
@@ -70,6 +68,8 @@ RUN \
 
 WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+
+RUN cd / && wget http://www.abenteuerland.at/download/smrender/current/smrender-4.0.r1821.tar.xz && tar xf smrender-4.0.r1821.tar.xz && cd smrender-4.0.r1821 &&  ./configure  &&  make &&  make install
 
 
 CMD ["/start.sh"]
