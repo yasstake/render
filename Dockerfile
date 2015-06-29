@@ -1,14 +1,16 @@
 FROM ubuntu
 
+#-- update ubuntu packages
+RUN apt-get update
+RUN apt-get -y install software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev libcairo2 libcairo2-dev 
+
+
 # for postgres
 EXPOSE 5432
 
 #for mapbox
 EXPOSE 3000
 
-#-- update ubuntu packages
-RUN apt-get update
-RUN apt-get -y install python-software-properties software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev libcairo2 libcairo2-dev
 
 #--- osmium
 RUN cd /tmp && git clone http://github.com/osmcode/libosmium && cd libosmium && mkdir build && cd build && cmake .. && make && make install
@@ -51,7 +53,7 @@ RUN chmod 0755 /start.sh
 RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list && apt-get -y update && wget --quiet --no-check-certificate -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list && apt-get -y update && apt-get -y upgrade && locale-gen --no-purge en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
-RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgis
+RUN apt-get -y install postgresql-9.3 postgresql-server-dev-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgis
 RUN echo "host    all             all             0.0.0.0/0               md5" >> /etc/postgresql/9.3/main/pg_hba.conf
 RUN service postgresql start && /bin/su postgres -c "createuser -d -s -r -l mapbox" && /bin/su postgres -c "psql postgres -c \"ALTER USER mapbox WITH ENCRYPTED PASSWORD 'mapbox'\"" && service postgresql stop
 RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.3/main/postgresql.conf
@@ -69,7 +71,7 @@ RUN \
 WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-RUN cd / && wget http://www.abenteuerland.at/download/smrender/current/smrender-4.0.r1821.tar.xz && tar xf smrender-4.0.r1821.tar.xz && cd smrender-4.0.r1821 &&  ./configure  &&  make &&  make install
+RUN cd /tmp && wget http://www.abenteuerland.at/download/smrender/current/smrender-4.0.r1821.tar.xz && tar xf smrender-4.0.r1821.tar.xz && cd smrender-4.0.r1821 &&  ./configure  &&  make &&  make install
 
 
 CMD ["/start.sh"]
