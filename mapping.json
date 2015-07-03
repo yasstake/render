@@ -937,77 +937,77 @@
         {
           "type": "string",
           "name": "seamark:name",
-          "key": null
+          "key": "seamark:name"
         },
         {
           "type": "string",
           "name": "seamark:beacon_lateral:shape",
-          "key": null
+          "key": "seamark:beacon_lateral:shape"
         },
         {
           "type": "string",
           "name": "seamark:beacon_lateral:category",
-          "key": null
+          "key": "seamark:beacon_lateral:category"
         },
         {
           "type": "string",
           "name": "seamark:beacon_lateral:colour",
-          "key": null
+          "key": "seamark:beacon_lateral:colour"
         },
         {
           "type": "string",
           "name": "seamark:beacon_lateral:colour:pattern",
-          "key": null
+          "key": "seamark:beacon_lateral:colour:pattern"
         },
         {
           "type": "string",
           "name": "seamark:beacon_safe_water:shape",
-          "key": null
+          "key": "seamark:beacon_safe_water:shape"
         },
         {
           "type": "string",
           "name": "seamark:beacon_safe_water:category",
-          "key": null
+          "key": "seamark:beacon_safe_water:category"
         },
         {
           "type": "string",
           "name": "seamark:beacon_safe_water:colour",
-          "key": null
+          "key": "seamark:beacon_safe_water:colour"
         },
         {
           "type": "string",
           "name": "seamark:beacon_safe_water:colour:pattern",
-          "key": null
+          "key": "seamark:beacon_safe_water:colour:pattern"
         },
         {
           "type": "string",
           "name": "seamark:beacon_cardinal:shape",
-          "key": null
+          "key": "seamark:beacon_cardinal:shape"
         },
         {
           "type": "string",
           "name": "seamark:beacon_cardinal:category",
-          "key": null
+          "key": "seamark:beacon_cardinal:category"
         },
         {
           "type": "string",
           "name": "seamark:beacon_cardinal:colour",
-          "key": null
+          "key": "seamark:beacon_cardinal:colour"
         },
         {
           "type": "string",
           "name": "seamark:beacon_cardinal:colour:pattern",
-          "key": null
+          "key": "seamark:beacon_cardinal:colour:pattern"
         },
         {
           "type": "string",
           "name": "seamark:isolated_danger:shape",
-          "key": null
+          "key": "seamark:isolated_danger:shape"
         },
         {
           "type": "string",
           "name": "seamark:isolated_danger:colour",
-          "key": null
+          "key": "seamark:isolated_danger:colour"
         },
         {
           "type": "string",
@@ -1017,27 +1017,27 @@
         {
           "type": "string",
           "name": "seamark:beacon_special_purpose:shape",
-          "key": null
+          "key": "seamark:beacon_special_purpose:shape"
         },
         {
           "type": "string",
           "name": "seamark:beacon_special_purpose:colour",
-          "key": null
+          "key": "seamark:beacon_special_purpose:colour"
         },
         {
           "type": "string",
           "name": "seamark:topmark:shape",
-          "key": null
+          "key": "seamark:topmark:shape"
         },
         {
           "type": "string",
           "name": "seamark:topmark:colour",
-          "key": null
+          "key": "seamark:topmark:colour"
         },
         {
           "type": "string",
           "name": "seamark:fixme",
-          "key": null
+          "key": "seamark:fixme"
         },
 
 
@@ -1080,132 +1080,132 @@
         {
           "type": "string",
           "name": "seamark:name",
-          "key": null
+          "key": "seamark:name"
         },
         {
           "type": "string",
           "name": "seamark:buoy_lateral:shape",
-          "key": null
+          "key": "seamark:buoy_lateral:shape"
         },
         {
           "type": "string",
           "name": "seamark:buoy_lateral:category",
-          "key": null
+          "key": "seamark:buoy_lateral:category"
         },
         {
           "type": "string",
           "name": "seamark:buoy_lateral:colour",
-          "key": null
+          "key": "seamark:buoy_lateral:colour"
         },
         {
           "type": "string",
           "name": "seamark:buoy_lateral:colour_pattern",
-          "key": null
+          "key": "seamark:buoy_lateral:colour_pattern"
         },
         {
           "type": "string",
           "name": "seamark:buoy_safe_water:shape",
-          "key": null
+          "key": "seamark:buoy_safe_water:shape"
         },
         {
           "type": "string",
           "name": "seamark:buoy_safe_water:colour",
-          "key": null
+          "key": "seamark:buoy_safe_water:colour"
         },
         {
           "type": "string",
           "name": "seamark:buoy_safe_water:colour_pattern",
-          "key": null
+          "key": "seamark:buoy_safe_water:colour_pattern"
         },
         {
           "type": "string",
           "name": "seamark:buoy_cardinal:shape",
-          "key": null
+          "key": "seamark:buoy_cardinal:shape"
         },
         {
           "type": "string",
           "name": "seamark:buoy_cardinal:category",
-          "key": null
+          "key": "seamark:buoy_cardinal:category"
         },
         {
           "type": "string",
           "name": "seamark:buoy_cardinal:colour",
-          "key": null
+          "key": "seamark:buoy_cardinal:colour"
         },
         {
           "type": "string",
           "name": "seamark:buoy_cardinal:colour_pattern",
-          "key": null
+          "key": "seamark:buoy_cardinal:colour_pattern"
         },
         {
           "type": "string",
           "name": "seamark:buoy_isolated_danger:shape",
-          "key": null
+          "key": "seamark:buoy_isolated_danger:shape"
         },
         {
           "type": "string",
           "name": "seamark:buoy_isolated_danger:colour",
-          "key": null
+          "key": "seamark:buoy_isolated_danger:colour"
         },
         {
           "type": "string",
           "name": "seamark:buoy_isolated_danger:colour_pattern",
-          "key": null
+          "key": "seamark:buoy_isolated_danger:colour_pattern"
         },
         {
           "type": "string",
           "name": "seamark:buoy_special_purpose:shape",
-          "key": null
+          "key": "seamark:buoy_special_purpose:shape"
         },
         {
           "type": "string",
           "name": "seamark:buoy_special_purpose:colour",
-          "key": null
+          "key": "seamark:buoy_special_purpose:colour"
         },
         {
           "type": "string",
           "name": "seamark:isolated_danger:shape",
-          "key": null
+          "key": "seamark:isolated_danger:shape"
         },
         {
           "type": "string",
           "name": "seamark:isolated_danger:colour",
-          "key": null
+          "key": "seamark:isolated_danger:colour"
         },
         {
           "type": "string",
           "name": "seamark:isolated_danger:colour:pattern",
-          "key": null
+          "key": "seamark:isolated_danger:colour:pattern"
         },
         {
           "type": "string",
           "name": "seamark:radar_transponder:category",
-          "key": null
+          "key": "seamark:radar_transponder:category"
         },
         {
           "type": "string",
           "name": "seamark:radar_reflector",
-          "key": null
+          "key": "seamark:radar_reflector"
         },
         {
           "type": "string",
           "name": "seamark:topmark:shape",
-          "key": null
+          "key": "seamark:topmark:shape"
         },
         {
           "type": "string",
           "name": "seamark:topmark:colour",
-          "key": null
+          "key": "seamark:topmark:colour"
         },
         {
           "type": "string",
           "name": "seamark:light:colour",
-          "key": null
+          "key": "seamark:light:colour"
         },
         {
           "type": "string",
           "name": "seamark:fixme",
-          "key": null
+          "key": "seamark:fixme"
         },
         {
           "type": "mapping_value",
@@ -1223,7 +1223,213 @@
           "buoy_special_purpose"
         ]
       }
+      },
+    "lights": {
+      "fields": [
+        {
+          "type": "id",
+          "name": "osm_id",
+          "key": null
+        },
+        {
+          "type": "geometry",
+          "name": "geometry",
+          "key": null
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "key": "name"
+        },
+        {
+          "type": "string",
+          "name": "seamark:name",
+          "key": "seamark:name"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:character",
+          "key": "seamark:light:character"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:colour",
+          "key":  "seamark:light:colour"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:sequence",
+          "key":  "seamark:light:sequence"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:period",
+          "key": "seamark:light:period"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:category",
+          "key": "seamark:light:category"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:height",
+          "key":  "seamark:light:height"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:range",
+          "key":  "seamark:light:range"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_vessel:name",
+          "key":  "seamark:light_vessel:name"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_vessel:colour",
+          "key":  "seamark:light_vessel:colour"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_vessel:colour_pattern",
+          "key":  "seamark:light_vessel:colour_pattern"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_float:name",
+          "key":  "seamark:light_float:name"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_float:colour",
+          "key":  "seamark:light_float:colour"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_float:colour_pattern",
+          "key":  "seamark:light_float:colour_pattern"
+        },
+        {
+          "type": "string",
+          "name": "seamark:topmark:shape",
+          "key":  "seamark:topmark:shape"
+        },
+        {
+          "type": "string",
+          "name": "seamark:topmark:colour",
+          "key": "seamark:topmark:colour"
+        },
+        {
+          "type": "string",
+          "name": "seamark:fixme",
+          "key":  "seamark:fixme"
+        },
+        {
+          "type": "mapping_value",
+          "name": "seamark:type",
+          "key": null
+        }
+      ],
+      "type": "point",
+      "mapping": {
+        "seamark:type": [
+          "light_vessel",
+          "light_float",
+          "light_minor",
+          "light_major"
+        ]
       }
+    },
+    "light_arc": {
+      "fields": [
+        {
+          "type": "id",
+          "name": "osm_id",
+          "key": null
+        },
+        {
+          "type": "geometry",
+          "name": "geometry",
+          "key": null
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "key": "name"
+        },
+        {
+          "type": "string",
+          "name": "seamark:arc_style",
+          "key":  "seamark:arc_style"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:object",
+          "key":  "seamark:light:object"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light:sector_nr",
+          "key":  "seamark:light:sector_nr"
+        },
+        {
+          "type": "string",
+          "name": "seamark:light_arc",
+          "key":  "seamark:light_arc"
+        },
+        {
+          "type": "integer",
+          "name": "seamark:light_radial",
+          "key":  "seamark:light_radial"
+        },
+        {
+          "type": "mapping_value",
+          "name": "seamark:type",
+          "key":  "seamark:type"
+        }
+      ],
+      "type": "linestring",
+      "mapping": {
+        "seamark:light:object": [
+          "light_major",
+          "light_minor"
+        ]
+      }
+    },
+    "sealane": {
+      "fields": [
+        {
+          "type": "id",
+          "name": "osm_id",
+          "key": null
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "key": "name"
+        },
+        {
+          "type": "geometry",
+          "name": "geometry",
+          "key": null
+        },
+        {
+          "type": "mapping_value",
+          "name": "seamark:type",
+          "key": null
+        }
+      ],
+      "type": "linestring",
+      "mapping": {
+        "seamark:type": [
+          "separation_boundary",
+          "separation_lane",
+          "separation_zone"
+        ]
+      }
+    }
 }
 }
 
