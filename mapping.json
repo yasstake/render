@@ -1317,39 +1317,6 @@
           "key": "seamark:fixme"
         },
         {
-          "type": "mapping_value",
-          "name": "seamark:type",
-          "key": null
-        }
-      ],
-      "type": "point",
-      "mapping": {
-        "seamark:type": [
-          "light_vessel",
-          "light_float",
-          "light_minor",
-          "light_major"
-        ]
-      }
-    },
-    "light_arc": {
-      "fields": [
-        {
-          "type": "id",
-          "name": "osm_id",
-          "key": null
-        },
-        {
-          "type": "geometry",
-          "name": "geometry",
-          "key": null
-        },
-        {
-          "type": "string",
-          "name": "name",
-          "key": "name"
-        },
-        {
           "type": "string",
           "name": "seamark:arc_style",
           "key": "seamark:arc_style"
@@ -1377,14 +1344,16 @@
         {
           "type": "mapping_value",
           "name": "seamark:type",
-          "key": "seamark:type"
+          "key": null
         }
       ],
-      "type": "linestring",
+      "type": "point",
       "mapping": {
-        "seamark:light:object": [
-          "light_major",
-          "light_minor"
+        "seamark:type": [
+          "light_vessel",
+          "light_float",
+          "light_minor",
+          "light_major"
         ]
       }
     },

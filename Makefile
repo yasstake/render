@@ -9,7 +9,9 @@ IMPOSM=/usr/local/imposm3
 
 SEAOSM=$(DATADIR)/japan.sea.osm
 SEAFILTEROSM=$(DATADIR)/japan.sea.filter.osm
-SMFILTER=smrender
+SMFILTER=/usr/local/bin/smfilter
+SEAFILTERPBF=$(DATADIR)/japan.sea.filter.pbf
+
 
 mkdir-work:
 	mkdir -p $(WORK)
@@ -42,22 +44,13 @@ coastline:
 coastline-shp: 
 	ogr2ogr -f "ESRI Shapefile" $(DATADIR)/land_polygons $(DATADIR)/japancoast.db land_polygons
 
-
 extract-tokyo:
-	osmosis --read-pbf $(RAWPBF) --write-xml file=- | osmosis --read-xml enableDateParsing=no file=-  --bounding-box top=35.4 left=139.3 bottom=35.0 right=140.0 --write-pbf file=$(INTER_PBF)
-
-extract-inter-osm:
-	osmosis --read-pbf $(INTER_PBF) --write-xml file=$(INTER_OSM)
-
-import-pbf:
-	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
-    			-mapping mapping.json -read $(IMPORTFILE) -write -overwritecache
-	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
-   			 -mapping mapping.json -deployproduction
+	osmosis --read-pbf $(RAWPBF) --write-xml file=- | osmosis --read-xml enableDateParsing=no file=-  --bounding-box top=35.5  left=139.5 bottom=35.0 right=134.2 --write-xml file=$(SEAOSM)
 
 
-import-coastline:
-	ogr2ogr 
+filter-sea:
+	 $(SMFILTER) -a 0.05 -d 20 -r 0.5 < $(SEAOSM) | osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
+
 
 extract-sea:
 	osmosis --read-pbf $(RAWPBF) \
@@ -66,16 +59,43 @@ extract-sea:
 		--tf accept-relations seamark:type=* \
 		--write-xml $(SEAOSM)
 
+
+extract-inter-osm:
+	osmosis --read-pbf $(INTER_PBF) --write-xml file=$(INTER_OSM)
+
+
+
+import-pbf:
+	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
+    			-mapping mapping.json -read $(SEAFILTERPBF) -write -overwritecache 
+	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
+   			 -mapping mapping.json -deployproduction
+
+import-pbf2:
+	venv/bin/imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAOSM)
+
+
+
+#import-sea:
+#	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
+# 			-mapping 2mapping.json -read $(SEAFILTERPBF) -write -overwritecache
+
+import-sea:
+	 
+	venv/bin/imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAFILTEROSM)
+
+
+
 extract-pbf:
 	osmosis --read-pbf $(RAWPBF) \
 		--write-xml $(SEAOSM)
 
+#--------------
 
-filter-sea:
-	(export LD_LIBRARY_PATH=/usr/local/lib/ && $(SMFILTER) -i $(INTER_OSM) -M -G -w $(SEAFILTEROSM))
+install-imposm:
+	virtualenv venv
+	venv/bin/pip install imposm
 
-import-sea:
-	$(IMPOSM) --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAFILTEROSM)
 
 boot-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -t mapbox
