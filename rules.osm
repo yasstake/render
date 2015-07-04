@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<osm version='0.6'>
-   <node>
-      <tag k='seamark:type' v=''/>
-      <tag k='_action_'
-           v='func:vsector@./libsmfilter.so?a=0.05,d=20,r=0.5'/>
-   </node>
-</osm>
