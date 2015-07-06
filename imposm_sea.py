@@ -507,6 +507,8 @@ beacons = Points(
     ('seamark:isolated_danger:colour:pattern', String()),
     ('seamark:beacon_special_purpose:shape', String()),
     ('seamark:beacon_special_purpose:colour', String()),
+    ('seamark:radar_reflector', String()),
+    ('seamark:light:colour', String()),
     ('seamark:topmark:shape', String()),
     ('seamark:topmark:colour', String()),
     ('seamark:fixme', String()),
@@ -517,11 +519,6 @@ buoys = Points(
   name = 'buoys',
   mapping = {
     'seamark:type': (
-      'buoy_lateral',
-      'buoy_safe_water',
-      'buoy_cardinal',
-      'buoy_isolated_danger',
-      'buoy_special_purpose',
       'beacon_lateral',
       'beacon_safe_water',
       'beacon_cardinal',
@@ -624,21 +621,6 @@ sealane = LineStrings (
         ('name', String()),
     )
 )
-
-sealane2 = Polygons (
-    name='sealane2',
-    mapping = {
-        'seamark:type': (
-#            'separation_boundary',
-#            'separation_lane',
-            'separation_zone',
-        )
-    },
-    fields = (
-        ('name', String()),
-    )
-)
-
 
 
 landmarks = Points(
