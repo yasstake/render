@@ -71,7 +71,13 @@ RUN \
 WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-RUN cd /tmp && wget http://www.abenteuerland.at/download/smrender/current/smrender-4.0.r1821.tar.xz && tar xf smrender-4.0.r1821.tar.xz && cd smrender-4.0.r1821 &&  ./configure  &&  make &&  make install
+
+RUN cd /tmp &&  wget http://www.abenteuerland.at/download/smfilter/smfilter-r1233.tbz2 && tar xvf smfilter-r1233.tbz2
+
+RUN cd /tmp && git clone https://github.com/omniscale/imposm && cd /tmp/imposm; python setup.py build && python setup.py install
+
+
+
 
 
 CMD ["/start.sh"]
