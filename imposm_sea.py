@@ -481,10 +481,10 @@ beacons = Points(
   name = 'beacons',
   mapping = {
     'seamark:type': (
-      'beacon_lateral',
-      'beacon_safe_water',
       'beacon_cardinal',
       'beacon_isolated_danger',
+      'beacon_lateral',
+      'beacon_safe_water',
       'beacon_special_purpose',
     )
   },
@@ -519,36 +519,45 @@ buoys = Points(
   name = 'buoys',
   mapping = {
     'seamark:type': (
-      'beacon_lateral',
-      'beacon_safe_water',
-      'beacon_cardinal',
-      'beacon_isolated_danger',
-      'beacon_special_purpose',
+      'buoy_cardinal',
+      'buoy_installation',
+      'buoy_isolated_danger',
+      'buoy_lateral',
+      'mooring',
+      'buoy_safe_water',
+      'buoy_special_purpose',
     )
   },
   fields = (
     ('seamark:name', String()),
-    ('seamark:buoy_lateral:shape', String()),
-    ('seamark:buoy_lateral:category', String()),
-    ('seamark:buoy_lateral:colour', String()),
-    ('seamark:buoy_lateral:colour_pattern', String()),
-    ('seamark:buoy_safe_water:shape', String()),
-    ('seamark:buoy_safe_water:colour', String()),
-    ('seamark:buoy_safe_water:colour_pattern', String()),
     ('seamark:buoy_cardinal:shape', String()),
     ('seamark:buoy_cardinal:category', String()),
     ('seamark:buoy_cardinal:colour', String()),
     ('seamark:buoy_cardinal:colour_pattern', String()),
+
+    ('seamark:buoy_installation:shape', String()),
+    ('seamark:buoy_installation:category', String()),
+    ('seamark:buoy_installation:colour', String()),
+    ('seamark:buoy_installation:colour_pattern', String()),
+
     ('seamark:buoy_isolated_danger:shape', String()),
+    ('seamark:buoy_isolated_danger:category', String()),
     ('seamark:buoy_isolated_danger:colour', String()),
     ('seamark:buoy_isolated_danger:colour_pattern', String()),
+
+    ('seamark:buoy_lateral:shape', String()),
+    ('seamark:buoy_lateral:category', String()),
+    ('seamark:buoy_lateral:colour', String()),
+    ('seamark:buoy_lateral:colour_pattern', String()),
+
+    ('seamark:buoy_safe_water:shape', String()),
+    ('seamark:buoy_safe_water:colour', String()),
+    ('seamark:buoy_safe_water:colour_pattern', String()),
+
     ('seamark:buoy_special_purpose:shape', String()),
     ('seamark:buoy_special_purpose:colour', String()),
 
-    ('seamark:isolated_danger:shape', String()),
-    ('seamark:isolated_danger:colour', String()),
-    ('seamark:isolated_danger:colour:pattern', String()),
-    ('seamark:radar_transponder:category', String()),
+    ('seamark:seamark:buoy_installation:category', String()),
     
     ('seamark:radar_reflector', String()),
     ('seamark:topmark:shape', String()),
@@ -562,10 +571,11 @@ lights = Points(
   name = 'lights',
   mapping = {
     'seamark:type': (
+      'light_major',
       'light_vessel',
       'light_float',
       'light_minor',
-      'light_major',
+
     )
   },
   fields = (
@@ -576,7 +586,11 @@ lights = Points(
     ('seamark:light:period', String()),
     ('seamark:light:category', String()),
     ('seamark:light:height', String()),
+    ('seamark:light:multiple', String()),
     ('seamark:light:range', String()),
+    ('seamark:light:group', String()),
+    ('seamark:light:period', String()),
+    ('seamark:light:sequence', String()),
     ('seamark:light_vessel:name', String()),
     ('seamark:light_vessel:colour', String()),
     ('seamark:light_vessel:colour_pattern', String()),
@@ -617,6 +631,7 @@ sealane = LineStrings (
             'separation_zone',
         )
     },
+    
     fields = (
         ('name', String()),
     )
