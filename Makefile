@@ -18,11 +18,15 @@ mkdir-work:
 	mkdir -p $(DATADIR)
 
 createdb:
-	sudo -u postgres createdb gis
-	sudo -u postgres psql -d gis -c "CREATE EXTENSION adminpack;"
-	sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
-	sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis_topology;"
-	sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
+	-sudo -u postgres createdb gis
+	-sudo -u postgres psql -d gis -c "CREATE EXTENSION adminpack;"
+	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
+	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis_topology;"
+	-sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
+
+dropdb:
+	-sudo -u postgres dropdb gis
+
 
 download-natural-earth:
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip  -O $(DATADIR)/ne_10m_admin_0_countries.zip
@@ -52,11 +56,17 @@ filter-sea:
 	osmosis --read-pbf $(RAWPBF) --write-xml file=- | $(SMFILTER) -a 0.05 -d 20 -r 0.5 -  | osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
 
 
+
+
 extract-sea:
 	osmosis --read-pbf $(RAWPBF) \
 		--tf accept-ways seamark:type=*	\
 		--tf accept-node seamark:type=*	\
 		--tf accept-relations seamark:type=* \
+		--write-xml file=-  | 	\
+		$(SMFILTER) -a 0.05 -d 20 -r 0.5 -  | \
+		osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
+	osmosis --read-pbf $(SEAFILTERPBF) \
 		--write-xml $(SEAOSM)
 
 
@@ -66,9 +76,29 @@ import-pbf:
 	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
    			 -mapping mapping.json -deployproduction
 
-extract-pbf:
-	osmosis --read-pbf $(RAWPBF) \
-		--write-xml $(SEAOSM)
+
+import-pbf-sea:
+	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
+    			-mapping seamapping.json -read $(SEAFILTERPBF) -write -overwritecache 
+	$(IMPOSM) import -connection postgis://mapbox:mapbox@localhost/gis \
+   			 -mapping seamapping.json -deployproduction
+
+#-----
+install-seafilter:
+	(cd /tmp; wget http://www.abenteuerland.at/download/smfilter/smfilter-r1233.tbz2; tar xvf smfilter-r1233.tbz2)
+
+
+install-imposm:
+	(cd /tmp; git clone https://github.com/omniscale/imposm; cd /tmp/imposm; python setup.py build; python setup.py install)
+
+
+#----
+
+import-pbf-imposm2:
+	imposm -m imposm_sea.py --overwrite-cache --read  $(SEAFILTERPBF)
+#	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAFILTERPBF)
+
+
 
 #--------------
 
