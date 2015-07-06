@@ -589,7 +589,6 @@ lights = Points(
     ('seamark:light:multiple', String()),
     ('seamark:light:range', String()),
     ('seamark:light:group', String()),
-    ('seamark:light:period', String()),
     ('seamark:light_vessel:name', String()),
     ('seamark:light_vessel:colour', String()),
     ('seamark:light_vessel:colour_pattern', String()),
