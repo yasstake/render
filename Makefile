@@ -31,12 +31,10 @@ download-all-data: download-natural-earth download-pbf download-osm
 
 download-natural-earth:
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip  -O $(DATADIR)/ne_10m_admin_0_countries.zip
-	cd $(DATADIR)
-	unzip -o ne_10m_admin_0_countries.zip
+	cd $(DATADIR);unzip -o ne_10m_admin_0_countries.zip
 
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_bathymetry_all.zip -O $(DATADIR)/ne_10m_bathymetry_all.zip 
-	cd $(DATADIR)
-	unzip -o ne_10m_bathymetry_all.zip 
+	cd $(DATADIR);unzip -o ne_10m_bathymetry_all.zip 
 
 
 download-pbf:
