@@ -27,6 +27,7 @@ createdb:
 dropdb:
 	-sudo -u postgres dropdb gis
 
+download-all-data: download-natural-earth, download-pbf, download-osm
 
 download-natural-earth:
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip  -O $(DATADIR)/ne_10m_admin_0_countries.zip
@@ -104,3 +105,5 @@ import-pbf-imposm2:
 
 boot-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -t mapbox
+
+
