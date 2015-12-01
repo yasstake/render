@@ -1,8 +1,7 @@
 FROM ubuntu
 
 #-- update ubuntu packages
-RUN apt-get update
-RUN apt-get -y install software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev libcairo2 libcairo2-dev 
+RUN apt-get update && apt-get -y install software-properties-common golang git wget unzip libboost-dev zlib1g-dev libshp-dev libgd2-xpm-dev  libgdal1-dev libexpat1-dev libgeos++-dev libprotobuf-dev libsparsehash-dev libv8-dev libicu-dev protobuf-compiler libosmpbf-dev cmake sqlite3 lbzip2 libzip2 libgdal-dev gdal-bin doxygen libbz2-dev build-essential graphviz libproj-dev libcairo2 libcairo2-dev python python-pip python-dev libtokyocabinet-dev  python-psycopg2 libgeos-c1
 
 
 # for postgres
@@ -16,17 +15,20 @@ EXPOSE 3000
 RUN cd /tmp && git clone http://github.com/osmcode/libosmium && cd libosmium && mkdir build && cd build && cmake .. && make && make install
 
 #--- osmcoastline
-RUN cd /tmp && git clone https://github.com/joto/osmcoastline && cd osmcoastline && mkdir build && cd build && cmake .. && make install
+#RUN cd /tmp && git clone https://github.com/joto/osmcoastline && cd osmcoastline && mkdir build && cd build && cmake .. && make install
+
+#RUN cd /tmp && wget https://github.com/osmcode/osmcoastline/archive/v2.1.1.tar.gz && tar xvf v2.1.1.tar.gz && cd osmcoastline-2.1.1 && mkdir build && cd build && cmake .. && make install
+
 
 
 
 #----  imposm   
-RUN cd /tmp && \
-    wget http://imposm.org/static/rel/imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz && \
-    gzip -dc imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz | tar xvf -  && \
-    cd imposm3-0.1dev-20150515-593f252-linux-x86-64 && \
-    cp imposm3 /usr/local/	&&\
-    cp -r lib/* /usr/local/lib
+#RUN cd /tmp && \
+#    wget http://imposm.org/static/rel/imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz && \
+#    gzip -dc imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz | tar xvf -  && \
+#    cd imposm3-0.1dev-20150515-593f252-linux-x86-64 && \
+#    cp imposm3 /usr/local/	&&\
+#    cp -r lib/* /usr/local/lib
 
 
 #---- install osmosis ----
@@ -40,11 +42,15 @@ RUN (cd /tmp && wget http://nodejs.org/dist/v0.10.36/node-v0.10.36-linux-x64.tar
 RUN cd /tmp && wget https://mapbox.s3.amazonaws.com/mapbox-studio/mapbox-studio-linux-x64-v0.2.7.zip && unzip /tmp/mapbox-studio-linux-x64-v0.2.7.zip && mv /tmp/mapbox-studio-linux-x64-v0.2.7 /mapbox
 
 #--- mapbox util
-RUN cd /tmp && wget https://raw.githubusercontent.com/mapbox/postgis-vt-util/master/lib.sql
+#RUN cd /tmp && wget https://raw.githubusercontent.com/mapbox/postgis-vt-util/master/lib.sql
+
+RUN cd /tmp && git clone https://github.com/mapbox/postgis-vt-util
+
 #--- 
 
 #--- project
 RUN mkdir /project && cd /project && git clone https://github.com/yasstake/render
+RUN cd /project && git clone https://github.com/yasstake/ksj2osm
 
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
@@ -74,10 +80,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 RUN cd /tmp &&  wget http://www.abenteuerland.at/download/smfilter/smfilter-r1233.tbz2 && tar xvf smfilter-r1233.tbz2
 
-RUN cd /tmp && git clone https://github.com/omniscale/imposm && cd /tmp/imposm; python setup.py build && python setup.py install
+#RUN cd /tmp && git clone https://github.com/omniscale/imposm && cd /tmp/imposm; python setup.py build && python setup.py install
 
-
-
+RUN pip install imposm
 
 
 CMD ["/start.sh"]
