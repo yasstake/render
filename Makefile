@@ -95,6 +95,9 @@ install-imposm:
 
 #----
 
+fish-right-osm:
+	python ../ksj2osm $(DATADIR)/KJS2/C21-59L-jgd.xml $(DATADIR)/fish.osm
+
 import-pbf-imposm2:
 	imposm -m imposm_sea.py --overwrite-cache --read  $(SEAFILTERPBF)
 #	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --read --write --optimize --overwrite-cache --deploy-production-tables $(SEAFILTERPBF)
