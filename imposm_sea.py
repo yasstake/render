@@ -636,6 +636,21 @@ sealane = LineStrings (
 )
 
 
+sealane = LineStrings (
+    name='sealane',
+    mapping = {
+        'seamark:type': (
+            'marine_farm',
+        )
+    },
+    
+    fields = (
+        ('seamark:marine_farm:category', String()),
+        ('KSJ2:fish_right:product', String())
+    )
+)
+
+
 landmarks = Points(
   name = 'landmarks',
   mapping = {
