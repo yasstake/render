@@ -636,8 +636,8 @@ sealane = LineStrings (
 )
 
 
-sealane = LineStrings (
-    name='sealane',
+marinefarm = LineStrings (
+    name='marinefarm',
     mapping = {
         'seamark:type': (
             'marine_farm',
