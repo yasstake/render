@@ -116,10 +116,10 @@ merge-sea-osm:
 	osmosis --read-pbf $(DATADIR)/seafilter.pbf \
 		--read-pbf $(WORKDIR)/japan.sea.pbf	\
 		--merge \
-		--write-pbf file=$(WORKDIR)/japan.mergesea.pbf
+		--write-xml file=$(WORKDIR)/japan.mergesea.osm
 
 japan-filtersea-pbf:
-	cat $(WORKDIR)/japan.mergesea.osm | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(WORKDIR)/filter.sea.pbf
+	cat $(WORKDIR)/japan.mergesea.osm | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(WORKDIR)/japan.sealight.pbf
 
 fish-right-osm:
 	python ../ksj2osm $(DATADIR)/KJS2/C21-59L-jgd.xml $(DATADIR)/fish.osm
@@ -134,10 +134,9 @@ import-pbf-imposm-2:
 	imposm -m imposm_sea.py --merge-cache --read $(DATADIR)/fish.pbf
 
 import-pbf-imposm-3:
-	imposm -m imposm_sea.py --merge-cache --read $(WORKDIR)/japan.mergesea.pbf
+	imposm -m imposm_sea.py --merge-cache --read $(WORKDIR)/japan.sealight.pbf
 
-
-import-pbf-imposm-3:
+import-pbf-imposm-4:
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --write --optimize --overwrite-cache --deploy-production-tables
 
 
