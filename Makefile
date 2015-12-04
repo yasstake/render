@@ -82,16 +82,60 @@ install-imposm:
 
 #----
 
+
+
+#
+#	japan.latest.pbf
+#		-> japan.land.pbf
+#		-> japan.sea.osm
+#
+#	japan.sea.osm + /ORG/japan.sea.osm -> sea.osm -> smfilter -> sea.pbf
+#	
+#	imposm land.pbf
+#	imposm sea.pbf
+#
+#
+
+WORKDIR = $(DATADIR)/WORK
+
+split-sea-land:
+	osmosis --read-pbf $(RAWPBF) \
+		--tf accept-ways seamark:type=*	\
+		--tf accept-node seamark:type=*	\
+		--tf accept-relations seamark:type=* \
+		--write-pbf file=$(WORKDIR)/japan.sea.pbf
+
+	osmosis --read-pbf $(RAWPBF) \
+		--tf reject-ways seamark:type=*	\
+		--tf reject-node seamark:type=*	\
+		--tf reject-relations seamark:type=* \
+		--write-pbf file=$(WORKDIR)/japan.land.pbf
+
+
+merge-sea-osm:
+	osmosis --read-pbf $(DATADIR)/seafilter.pbf \
+		--read-pbf $(WORKDIR)/japan.sea.pbf	\
+		--merge \
+		--write-pbf file=$(WORKDIR)/japan.mergesea.pbf
+
+japan-filtersea-pbf:
+	cat $(WORKDIR)/japan.mergesea.osm | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(WORKDIR)/filter.sea.pbf
+
 fish-right-osm:
 	python ../ksj2osm $(DATADIR)/KJS2/C21-59L-jgd.xml $(DATADIR)/fish.osm
 
 import-pbf-imposm: import-pbf-imposm-1 import-pbf-imposm-2 import-pbf-imposm-3 
 
 import-pbf-imposm-1:
-	imposm -m imposm_sea.py --overwrite-cache --read  $(SEAFILTERPBF)
+	imposm -m imposm_sea.py --overwrite-cache --read  $(WORKDIR)/japan.land.pbf
+	imposm -m imposm_sea.py --merge-cache --read  $(WORKDIR)/japan.sea.pbf
 
 import-pbf-imposm-2:
 	imposm -m imposm_sea.py --merge-cache --read $(DATADIR)/fish.pbf
+
+import-pbf-imposm-3:
+	imposm -m imposm_sea.py --merge-cache --read $(WORKDIR)/japan.mergesea.pbf
+
 
 import-pbf-imposm-3:
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --write --optimize --overwrite-cache --deploy-production-tables
