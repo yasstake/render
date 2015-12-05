@@ -27,7 +27,7 @@ createdb:
 dropdb:
 	-sudo -u postgres dropdb gis
 
-download-all-data: download-natural-earth download-pbf download-osm
+download-all-data: download-natural-earth download-pbf
 
 download-natural-earth:
 	wget http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip  -O $(DATADIR)/ne_10m_admin_0_countries.zip
@@ -40,8 +40,6 @@ download-natural-earth:
 download-pbf:
 	wget http://download.geofabrik.de/asia/japan-latest.osm.pbf -O $(RAWPBF)
 
-download-osm:
-	wget http://download.geofabrik.de/asia/japan-latest.osm.bz2 -O $(RAWBZ2)
 
 coastline:
 	osmcoastline --verbose --output-polygons=land -o $(DATADIR)/japancoast.db $(RAWPBF)
@@ -49,26 +47,8 @@ coastline:
 coastline-shp: 
 	ogr2ogr -f "ESRI Shapefile" $(DATADIR)/land_polygons $(DATADIR)/japancoast.db land_polygons
 
-filter-tokyo:
-	osmosis --read-pbf $(RAWPBF) --write-xml file=- | osmosis --read-xml enableDateParsing=no file=-  --bounding-box top=35.5  left=139.5 bottom=35.0 right=134.2 --write-xml file=- | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
 
 
-filter-sea:
-	osmosis --read-pbf $(RAWPBF) --write-xml file=- | $(SMFILTER) -a 0.05 -d 20 -r 0.5 -  | osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
-
-
-
-
-extract-sea:
-	osmosis --read-pbf $(RAWPBF) \
-		--tf accept-ways seamark:type=*	\
-		--tf accept-node seamark:type=*	\
-		--tf accept-relations seamark:type=* \
-		--write-xml file=-  | 	\
-		$(SMFILTER) -a 0.05 -d 20 -r 0.5 -  | \
-		osmosis --read-xml file=- --write-pbf file=$(SEAFILTERPBF)
-	osmosis --read-pbf $(SEAFILTERPBF) \
-		--write-xml $(SEAOSM)
 
 
 #-----
@@ -98,47 +78,50 @@ install-imposm:
 
 WORKDIR = $(DATADIR)/WORK
 
-split-sea-land:
+JAPAN_LAND_PBF=$(WORKDIR)/japan.land.pbf
+JAPAN_SEA_PBF=$(WORKDIR)/japan.sea.pbf
+ORG_SEA_PBF=$(DATADIR)/seafilter.pbf
+MERGE_SEA_OSM=$(WORKDIR)/japan.mergesea.osm
+JAPAN_FILTER_PBF=$(WORKDIR)/japan.mergefilter.pbf
+JAPAN_FILTER_OSM=$(WORKDIR)/japan.mergefilter.osm
+FISH_RIGHT_OSM=$(WORKDIR)/fish.osm
+FISH_RIGHT_PBF=$(WORKDIR)/fish.osm
+FISH_RIGHT_KJS2=$(DATADIR)/KJS2/C21-59L-jgd.xml
+
+$(JAPAN_SEA_PBF):	$(RAWPBF)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf accept-ways seamark:type=*	\
 		--tf accept-node seamark:type=*	\
 		--tf accept-relations seamark:type=* \
-		--write-pbf file=$(WORKDIR)/japan.sea.pbf
+		--write-pbf file=$(JAPAN_SEA_PBF)
 
+$(JAPAN_LAND_PBF):	$(RAWPBF)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf reject-ways seamark:type=*	\
 		--tf reject-node seamark:type=*	\
 		--tf reject-relations seamark:type=* \
-		--write-pbf file=$(WORKDIR)/japan.land.pbf
+		--write-pbf file=$(JAPAN_LAND_PBF)
 
-
-merge-sea-osm:
-	osmosis --read-pbf $(DATADIR)/seafilter.pbf \
-		--read-pbf $(WORKDIR)/japan.sea.pbf	\
+$(MERGE_SEA_OSM): $(ORG_SEA_PBF) $(JAPAN_SEA_PBF)
+	osmosis --read-pbf $(ORG_SEA_PBF) \
+		--read-pbf $(JAPAN_SEA_PBF)\
 		--merge \
-		--write-xml file=$(WORKDIR)/japan.mergesea.osm
+		--write-xml file=$(MERGE_SEA_OSM)
 
-japan-filtersea-pbf:
-	cat $(WORKDIR)/japan.mergesea.osm | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(WORKDIR)/japan.sealight.pbf
+$(JAPAN_FILTER_PBF): $(MERGE_SEA_OSM)
+	cat $(MERGE_SEA_OSM) | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(JAPAN_FILTER_PBF)
+	osmosis --read-pbf file=$(JAPAN_FILTER_PBF) --write-xml file=$(JAPAN_FILTER_OSM)
 
-fish-right-osm:
-	python ../ksj2osm $(DATADIR)/KJS2/C21-59L-jgd.xml $(DATADIR)/fish.osm
+$(FISH_RIGHT_PBF):
+	python ../ksj2osm/fish.py $(FISH_RIGHT_KJS2) $(FISH_RIGHT_OSM)
+	osmosis --read-xml file=$(FISH_RIGHT_OSM) --write-pbf $(FISH_RIGHT_PBF)
 
-import-pbf-imposm: import-pbf-imposm-1 import-pbf-imposm-2 import-pbf-imposm-3 
-
-import-pbf-imposm-1:
-	imposm -m imposm_sea.py --overwrite-cache --read  $(WORKDIR)/japan.land.pbf
-	imposm -m imposm_sea.py --merge-cache --read  $(WORKDIR)/japan.sea.pbf
-
-import-pbf-imposm-2:
-	imposm -m imposm_sea.py --merge-cache --read $(DATADIR)/fish.pbf
-
-import-pbf-imposm-3:
-	imposm -m imposm_sea.py --merge-cache --read $(WORKDIR)/japan.sealight.pbf
-
-import-pbf-imposm-4:
-	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py --write --optimize --overwrite-cache --deploy-production-tables
-
+import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_SEA_PBF) $(JAPAN_FILTER_PBF)
+	imposm -m imposm_sea.py --overwrite-cache --read  $(JAPAN_LAND_PBF)
+	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_SEA_PBF)
+	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_FILTER_PBF)
+	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
+		--write --optimize --overwrite-cache --deploy-production-tables
 
 
 #--------------
