@@ -88,21 +88,25 @@ FISH_RIGHT_OSM=$(WORKDIR)/fish.osm
 FISH_RIGHT_PBF=$(WORKDIR)/fish.osm
 FISH_RIGHT_KJS2=$(DATADIR)/KJS2/C21-59L-jgd.xml
 
-$(JAPAN_SEA_PBF):	$(RAWPBF)
+$(WORKDIR):
+	mkdir -p $(WORKDIR)
+
+
+$(JAPAN_SEA_PBF):	$(RAWPBF) $(WORKDIR)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf accept-ways seamark:type=*	\
 		--tf accept-node seamark:type=*	\
 		--tf accept-relations seamark:type=* \
 		--write-pbf file=$(JAPAN_SEA_PBF)
 
-$(JAPAN_LAND_PBF):	$(RAWPBF)
+$(JAPAN_LAND_PBF):	$(RAWPBF) $(WORKDIR)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf reject-ways seamark:type=*	\
 		--tf reject-node seamark:type=*	\
 		--tf reject-relations seamark:type=* \
 		--write-pbf file=$(JAPAN_LAND_PBF)
 
-$(MERGE_SEA_OSM): $(ORG_SEA_PBF) $(JAPAN_SEA_PBF)
+$(MERGE_SEA_OSM): $(ORG_SEA_PBF) $(JAPAN_SEA_PBF) $(WORKDIR)
 	osmosis --read-pbf $(ORG_SEA_PBF) \
 		--read-pbf $(JAPAN_SEA_PBF)\
 		--merge \
