@@ -116,10 +116,11 @@ $(FISH_RIGHT_PBF):
 	python ../ksj2osm/fish.py $(FISH_RIGHT_KJS2) $(FISH_RIGHT_OSM)
 	osmosis --read-xml file=$(FISH_RIGHT_OSM) --write-pbf $(FISH_RIGHT_PBF)
 
-import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_SEA_PBF) $(JAPAN_FILTER_PBF)
+import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_SEA_PBF) $(JAPAN_FILTER_PBF) $(FISH_RIGHT_PBF)
 	imposm -m imposm_sea.py --overwrite-cache --read  $(JAPAN_LAND_PBF)
 	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_SEA_PBF)
 	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_FILTER_PBF)
+	imposm -m imposm_sea.py --merge-cache --read $(FISH_RIGHT_PBF)
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
 		--write --optimize --overwrite-cache --deploy-production-tables
 
