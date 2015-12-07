@@ -23,6 +23,7 @@ createdb:
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis_topology;"
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
+	-sudo -u postgres psql -d gis -f /tmp/postgis-vt-util/postgis-vt-util.sql
 
 dropdb:
 	-sudo -u postgres dropdb gis
@@ -122,6 +123,7 @@ import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_SEA_PBF) $(JAPAN_FILTER_PBF)
 	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_FILTER_PBF)
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
 		--write --optimize --overwrite-cache --deploy-production-tables
+
 
 
 #--------------
