@@ -56,9 +56,6 @@ install-seafilter:
 	(cd /tmp; wget http://www.abenteuerland.at/download/smfilter/smfilter-r1233.tbz2; tar xvf smfilter-r1233.tbz2)
 
 
-install-imposm:
-	(cd /tmp; git clone https://github.com/omniscale/imposm; cd /tmp/imposm; python setup.py build; python setup.py install)
-
 
 #----
 
