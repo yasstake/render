@@ -23,6 +23,7 @@ createdb:
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis_topology;"
 	-sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
+	-sudo -u postgres psql -d gis -f /tmp/postgis-vt-util/postgis-vt-util.sql
 
 dropdb:
 	-sudo -u postgres dropdb gis
@@ -81,25 +82,29 @@ ORG_SEA_PBF=$(DATADIR)/seafilter.pbf
 MERGE_SEA_OSM=$(WORKDIR)/japan.mergesea.osm
 JAPAN_FILTER_PBF=$(WORKDIR)/japan.mergefilter.pbf
 JAPAN_FILTER_OSM=$(WORKDIR)/japan.mergefilter.osm
-FISH_RIGHT_OSM=$(WORKDIR)/fish.osm
-FISH_RIGHT_PBF=$(WORKDIR)/fish.osm
+FISH_RIGHT_OSM=../ksj2osm/fish.osm
+FISH_RIGHT_PBF=$(WORKDIR)/fish.pbf
 FISH_RIGHT_KJS2=$(DATADIR)/KJS2/C21-59L-jgd.xml
 
-$(JAPAN_SEA_PBF):	$(RAWPBF)
+$(WORKDIR):
+	mkdir -p $(WORKDIR)
+
+
+$(JAPAN_SEA_PBF):	$(RAWPBF) $(WORKDIR)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf accept-ways seamark:type=*	\
 		--tf accept-node seamark:type=*	\
 		--tf accept-relations seamark:type=* \
 		--write-pbf file=$(JAPAN_SEA_PBF)
 
-$(JAPAN_LAND_PBF):	$(RAWPBF)
+$(JAPAN_LAND_PBF):	$(RAWPBF) $(WORKDIR)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf reject-ways seamark:type=*	\
 		--tf reject-node seamark:type=*	\
 		--tf reject-relations seamark:type=* \
 		--write-pbf file=$(JAPAN_LAND_PBF)
 
-$(MERGE_SEA_OSM): $(ORG_SEA_PBF) $(JAPAN_SEA_PBF)
+$(MERGE_SEA_OSM): $(ORG_SEA_PBF) $(JAPAN_SEA_PBF) $(WORKDIR)
 	osmosis --read-pbf $(ORG_SEA_PBF) \
 		--read-pbf $(JAPAN_SEA_PBF)\
 		--merge \
@@ -109,16 +114,19 @@ $(JAPAN_FILTER_PBF): $(MERGE_SEA_OSM)
 	cat $(MERGE_SEA_OSM) | $(SMFILTER) -a 0.05 -d 20 -r 0.5  | osmosis --read-xml file=- --write-pbf file=$(JAPAN_FILTER_PBF)
 	osmosis --read-pbf file=$(JAPAN_FILTER_PBF) --write-xml file=$(JAPAN_FILTER_OSM)
 
-$(FISH_RIGHT_PBF):
-	python ../ksj2osm/fish.py $(FISH_RIGHT_KJS2) $(FISH_RIGHT_OSM)
+$(FISH_RIGHT_PBF): $(FISH_RIGHT_OSM)
+#	python ../ksj2osm/fish.py $(FISH_RIGHT_KJS2) $(FISH_RIGHT_OSM)
 	osmosis --read-xml file=$(FISH_RIGHT_OSM) --write-pbf $(FISH_RIGHT_PBF)
 
-import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_SEA_PBF) $(JAPAN_FILTER_PBF)
+import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_FILTER_PBF) $(FISH_RIGHT_PBF)
 	imposm -m imposm_sea.py --overwrite-cache --read  $(JAPAN_LAND_PBF)
-	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_SEA_PBF)
+	imposm -m imposm_sea.py --merge-cache --read $(FISH_RIGHT_PBF)
 	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_FILTER_PBF)
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
 		--write --optimize --overwrite-cache --deploy-production-tables
+
+export-mbtiles:
+	
 
 
 #--------------
