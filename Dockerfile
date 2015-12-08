@@ -22,15 +22,6 @@ RUN cd /tmp && git clone http://github.com/osmcode/libosmium && cd libosmium && 
 
 
 
-#----  imposm   
-#RUN cd /tmp && \
-#    wget http://imposm.org/static/rel/imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz && \
-#    gzip -dc imposm3-0.1dev-20150515-593f252-linux-x86-64.tar.gz | tar xvf -  && \
-#    cd imposm3-0.1dev-20150515-593f252-linux-x86-64 && \
-#    cp imposm3 /usr/local/	&&\
-#    cp -r lib/* /usr/local/lib
-
-
 #---- install osmosis ----
 RUN cd /tmp && wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.zip && cd /usr/local/ && unzip /tmp/osmosis-latest.zip
 
@@ -78,9 +69,8 @@ WORKDIR /data
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 
-RUN cd /tmp &&  wget http://www.abenteuerland.at/download/smfilter/smfilter-r1233.tbz2 && tar xvf smfilter-r1233.tbz2
+RUN cd /tmp &&  git clone https://github.com/yasstake/seafilter && cd seafilter && make && make install  
 
-#RUN cd /tmp && git clone https://github.com/omniscale/imposm && cd /tmp/imposm; python setup.py build && python setup.py install
 
 RUN pip install imposm
 
