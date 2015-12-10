@@ -139,4 +139,5 @@ run-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -v /Users/takeo/PGSQL:/PGSQL -it mapbox bash
 
 
-
+run-docker22:
+        docker run  -p 3000:3000 -p 5432:5432 -v /home/core/OSM:/WORK -v /home/core/PGSQL:/PGSQL -it mapbox bash
