@@ -131,12 +131,15 @@ export-mbtiles:
 
 #--------------
 
+HOMEDIR=~/
+
+
 boot-docker:
-	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -t mapbox
+	docker run  -p 3000:3000 -p 5432:5432 -v $(HOMEDIR)/OSM:/WORK -v $(HOMEDIR)/PGSQL:/PGSQL -t mapbox
 
 
 run-docker:
-	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -v /Users/takeo/PGSQL:/PGSQL -it mapbox bash
+	docker run  -p 3000:3000 -p 5432:5432 -v $(HOMEDIR)/OSM:/WORK -v $(HOMEDIR)/PGSQL:/PGSQL -it mapbox bash
 
 
 
