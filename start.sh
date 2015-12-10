@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATADIR="/PGSQL/
+DATADIR="/PGSQL"
 CONF="/etc/postgresql/9.3/main/postgresql.conf"
 POSTGRES="/usr/lib/postgresql/9.3/bin/postgres"
 INITDB="/usr/lib/postgresql/9.3/bin/initdb"

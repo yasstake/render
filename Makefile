@@ -141,5 +141,3 @@ boot-docker:
 run-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v $(HOMEDIR)/OSM:/WORK -v $(HOMEDIR)/PGSQL:/PGSQL -it mapbox bash
 
-
-
