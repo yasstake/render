@@ -21,9 +21,9 @@ fi
 
 trap "echo \"Sending SIGTERM to postgres\"; killall -s SIGTERM postgres" SIGTERM
 
-su postgres sh -c "$POSTGRES -D $DATADIR --config_file=$CONF" &
+su postgres sh -c "$POSTGRES -D $DATADIR --config_file=$CONF -c shared_buffers=2GB" &
 
-(cd  /mapbox/resources/app/ && npm start &)
+#(cd  /mapbox/resources/app/ && npm start &)
 
 wait $!
 
