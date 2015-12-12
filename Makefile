@@ -125,19 +125,15 @@ import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_FILTER_PBF) $(FISH_RIGHT_PBF)
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
 		--write --optimize --overwrite-cache --deploy-production-tables
 
-export-mbtiles:
-	
+BBOX=139,35,140,36
 
+tiles:
+	/mapbox/resources/app/node_modules/tilelive/bin/tilelive-copy --bounds=$(BBOX) --maxzoom=14 bridge:///$(WORKDIR)/data.xml mbtiles:///sea.mbtiles
 
 #--------------
 
 boot-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -t mapbox
 
-
 run-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v /Users/takeo/OSM:/WORK -v /Users/takeo/PGSQL:/PGSQL -it mapbox bash
-
-
-run-docker22:
-        docker run  -p 3000:3000 -p 5432:5432 -v /home/core/OSM:/WORK -v /home/core/PGSQL:/PGSQL -it mapbox bash
