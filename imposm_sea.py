@@ -636,7 +636,7 @@ sealane = LineStrings (
 )
 
 
-marinefarm = LineStrings (
+marinefarm = Polygons (
     name='marinefarm',
     mapping = {
         'seamark:type': (
