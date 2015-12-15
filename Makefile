@@ -1,6 +1,7 @@
 WORK=/WORK
 DATADIR=$(WORK)/data
-RAWPBF=$(DATADIR)/japan-latest.osm.pbf
+RAWPBF=$(DATADIR)/clipjapan-latest.osm.pbf
+ORGPBF=$(DATADIR)/japan-latest.osm.pbf
 RAWBZ2=$(DATADIR)/japan-latest.osm.bz2
 INTER_PBF=$(DATADIR)/tokyo.pbf
 INTER_OSM=$(DATADIR)/tokyo.osm
@@ -90,6 +91,14 @@ $(WORKDIR):
 	mkdir -p $(WORKDIR)
 
 
+clipdata:
+	osmosis --read-pbf $(ORGPBF) --bounding-box bottom=35 top=36 left=139 right=140 --write-pbf $(RAWPBF)
+
+
+rawdata:
+	cp $(ORGPBF) $(RAWPBF)
+
+
 $(JAPAN_SEA_PBF):	$(RAWPBF) $(WORKDIR)
 	osmosis --read-pbf $(RAWPBF) \
 		--tf accept-ways seamark:type=*	\
@@ -118,16 +127,21 @@ $(FISH_RIGHT_PBF): $(FISH_RIGHT_OSM)
 #	python ../ksj2osm/fish.py $(FISH_RIGHT_KJS2) $(FISH_RIGHT_OSM)
 	osmosis --read-xml file=$(FISH_RIGHT_OSM) --write-pbf $(FISH_RIGHT_PBF)
 
-import-pbf-imposm: $(JAPAN_LAND_PBF) $(JAPAN_FILTER_PBF) $(FISH_RIGHT_PBF)
-	imposm -m imposm_sea.py --overwrite-cache --read  $(JAPAN_LAND_PBF)
-	imposm -m imposm_sea.py --merge-cache --read $(FISH_RIGHT_PBF)
-	imposm -m imposm_sea.py --merge-cache --read $(JAPAN_FILTER_PBF)
+import-pbf-imposm: import-table import-cache
+
+import-cache: $(JAPAN_LAND_PBF) $(JAPAN_FILTER_PBF) $(FISH_RIGHT_PBF)
+	imposm -m imposm_sea.py --overwrite-cache --cache-dir=$(WORKDIR) --read  $(JAPAN_LAND_PBF)
+	imposm -m imposm_sea.py --merge-cache --cache-dir=$(WORKDIR) --read $(FISH_RIGHT_PBF)
+	imposm -m imposm_sea.py --merge-cache  --cache-dir=$(WORKDIR) --read $(JAPAN_FILTER_PBF)
+
+import-table:
 	imposm --connection postgis://mapbox:mapbox@localhost/gis -d gis -m imposm_sea.py \
-		--write --optimize --overwrite-cache --deploy-production-tables
+		--write --optimize --overwrite-cache --deploy-production-tables  --cache-dir=$(WORKDIR)
 
-export-mbtiles:
-	
+BBOX=139,35,140,36
 
+tiles:
+	/mapbox/resources/app/node_modules/tilelive/bin/tilelive-copy --bounds=$(BBOX) --maxzoom=14 bridge:///$(WORKDIR)/data.xml mbtiles:///$(WORKDIR)/sea.mbtiles
 
 #--------------
 
@@ -137,7 +151,5 @@ HOMEDIR=~/
 boot-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v $(HOMEDIR)/OSM:/WORK -v $(HOMEDIR)/PGSQL:/PGSQL -t mapbox
 
-
 run-docker:
 	docker run  -p 3000:3000 -p 5432:5432 -v $(HOMEDIR)/OSM:/WORK -v $(HOMEDIR)/PGSQL:/PGSQL -it mapbox bash
-
